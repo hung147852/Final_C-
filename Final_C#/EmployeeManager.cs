@@ -19,7 +19,7 @@ namespace Final_C
         public Employee? Login(string username, string password)
         {
             //select DB de check
-            return employeeDAL.SelectByUsernamAndPassword(username, password);
+            return employeeDAL.SelectByUsernameAndPassword(username, password);
         }
         public List<Employee> Find (string key) 
         {

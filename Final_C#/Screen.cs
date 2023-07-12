@@ -192,9 +192,9 @@ namespace Final_C
                 Console.WriteLine("==== EMPLOYEE MANAGE ====");
                 Console.WriteLine("====       LOGIN     ====");
                 Console.WriteLine("Username: ");
-                string uname = Console.ReadLine();
+                string? uname = Console.ReadLine();
                 Console.WriteLine("Password: ");
-                string pwd = Console.ReadLine();
+                string? pwd = Console.ReadLine();
                 // Check Login
                 Employee? employee = manager.Login(uname, pwd);
                 if (employee == null)

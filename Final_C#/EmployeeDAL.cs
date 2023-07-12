@@ -17,7 +17,7 @@ namespace Final_C
             conn = new DBConnector().GetConnection();
             conn.Open();
         }
-        public Employee? SelectByUsernamAndPassword(string username, string password)
+        public Employee? SelectByUsernameAndPassword(string username, string password)
         {
             
             Employee emp = null;
