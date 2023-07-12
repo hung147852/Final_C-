@@ -30,7 +30,7 @@ namespace Final_C
             {
                emp = new Employee();
                emp.Id = (int) reader["id"];
-               emp.User = (string)reader["user"];
+               emp.User = (string)reader["username"];
                emp.FullName = (string) reader["name"];
                emp.Email = (string) reader["email"];
                //emp.Password = (string) reader["password"];
@@ -41,7 +41,7 @@ namespace Final_C
         public Employee? SelectById(int id)
         {
 
-            Employee emp = null;
+            Employee? emp = null;
             string sql = "SELECT * FROM EMPLOYEE WHERE id = @0";
             SqlCommand cmd = new SqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("0", id);
@@ -50,6 +50,7 @@ namespace Final_C
             {
                 emp = new Employee();
                 emp.Id = (int)reader["id"];
+                emp.User = (string)reader["username"];
                 emp.FullName = (string)reader["name"];
                 emp.Email = (string)reader["email"];
                 emp.Role = (EmployeeRole)reader["role"];
@@ -60,7 +61,7 @@ namespace Final_C
         {
 
             List<Employee> list = new List<Employee>();
-            string sql = "SELECT * FROM EMPLOYEE WHERE email LIKE @0 OR name LIKE @1 OR user LIKE @2";
+            string sql = "SELECT * FROM EMPLOYEE WHERE email LIKE @0 OR name LIKE @1 OR username LIKE @2";
             SqlCommand cmd = new SqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("0", key);
             cmd.Parameters.AddWithValue("1", key);
@@ -70,8 +71,8 @@ namespace Final_C
             {
                 Employee emp = new Employee();
                 emp.Id = (int)reader["id"];
-                emp.User = (string)reader["user"];
-                emp.FullName = (string)reader["fullname"];
+                emp.User = (string)reader["username"];
+                emp.FullName = (string)reader["name"];
                 emp.Email = (string)reader["email"];
                 emp.Role = (EmployeeRole)reader["role"];
                 list.Add(emp);
@@ -89,8 +90,8 @@ namespace Final_C
             {
                 Employee emp = new Employee();
                 emp.Id = (int)reader["id"];
-                emp.User = (string)reader["user"];
-                emp.FullName = (string)reader["fullname"];
+                emp.User = (string)reader["username"];
+                emp.FullName = (string)reader["name"];
                 emp.Email = (string)reader["email"];
                 emp.Role = (EmployeeRole)reader["role"];
                 list.Add(emp);

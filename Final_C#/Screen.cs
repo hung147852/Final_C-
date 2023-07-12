@@ -64,87 +64,77 @@ namespace Final_C
         }
 
         private void PrintUpdateScreen()
-        //{
-        //    Console.WriteLine("==== EMPLOYEE SEARCH ====");
-        //    Console.Write("ENTER ID or NAME/EMAIL: ");
-        //    Console.Write("Enter Employee ID: ");
-
-        //    string key = Console.ReadLine();
-        //    EmployeeDAL employeeDAL = new EmployeeDAL();
-        //    Employee? employees = EmployeeManager.Find(key);
-        //    if (employees != null)
-        //    {
-        //        Console.WriteLine("Current Full Name: " + employees.FullName);
-        //        Console.Write("Enter New Full Name (Leave blank to keep current name): ");
-        //        string newFullName = Console.ReadLine();
-
-        //        Console.WriteLine("Current Email: " + employees.Email);
-        //        Console.Write("Enter New Email (Leave blank to keep current email): ");
-        //        string newEmail = Console.ReadLine();
-
-        //        if (!string.IsNullOrEmpty(newFullName))
-        //        {
-        //            employees.FullName = newFullName;
-        //        }
-
-        //        if (!string.IsNullOrEmpty(newEmail))
-        //        {
-        //            employees.Email = newEmail;
-        //        }
-
-        //        int rowsAffected = employeeDAL.Update(employees);
-        //        if (rowsAffected > 0)
-        //        {
-        //            Console.WriteLine("Employee updated successfully.");
-        //        }
-        //        else
-        //        {
-        //            Console.WriteLine("Failed to update employee.");
-        //        }
-        //    }
-        //    else
-        //    {
-        //        Console.WriteLine("Employee not found.");
-        //    }
-
-        //}
         {
-            EmployeeDAL employeeDAL = new EmployeeDAL();
-            Console.Write("Enter employee ID or name: ");
+            Console.WriteLine("==== UPDATE EMPLOYEE ====");
+            Console.Write("Enter Employee ID or Name: ");
             string key = Console.ReadLine();
-            List<Employee> employees = manager.Find(key);
-            if (employees.Count == 0)
-            {
-                Console.WriteLine("No employee found!");
-                return;
-            }
-            Employee emp = employees[0];
-            Console.WriteLine("Current email: " + emp.Email);
-            Console.Write("Enter new email (leave blank to keep current): ");
-            string newEmail = Console.ReadLine();
-            if (!string.IsNullOrEmpty(newEmail))
-                emp.Email = newEmail;
-            Console.WriteLine("Current Password: " + emp.Password);
-            Console.Write("Enter new password (leave blank to keep current): ");
-            string newPassword = Console.ReadLine();
-            if (!string.IsNullOrEmpty(newPassword))
-                emp.Password = newPassword;
-            Console.WriteLine("Current Role: " + emp.Role);
-            Console.Write("Enter new role (leave blank to keep current): ");
+            EmployeeDAL employeeDAL = new EmployeeDAL();
+            EmployeeManager employeeManager = new EmployeeManager();
+            List<Employee> employees = employeeManager.Find(key);
 
-            string key1 = Console.ReadLine();
-            int newRole;
-            if (!int.TryParse(key, out newRole))
+            if (employees.Count > 0)
             {
-                emp.Role = (EmployeeRole)newRole;
+                if (employees.Count == 1)
+                {
+                    Employee employee = employees[0];
+                    Console.WriteLine("Employee found:");
+                    Console.WriteLine("ID: " + employee.Id);
+                    Console.WriteLine("USER: " + employee.User);
+                    Console.WriteLine("Full Name: " + employee.FullName);
+                    Console.WriteLine("Email: " + employee.Email);
+                    Console.WriteLine("Role: " + employee.Role);
+
+                    Console.WriteLine("Current Password: " + employee.Password);
+                    Console.Write("Enter Current Password to update (Leave blank to keep current password): ");
+                    string currentPassword = Console.ReadLine();
+
+                    if (!string.IsNullOrEmpty(currentPassword) && currentPassword == employee.Password)
+                    {
+                        Console.Write("Enter New Password: ");
+                        string newPassword = Console.ReadLine();
+                        employee.Password = newPassword;
+                    }
+
+                    Console.Write("Enter New Email (Leave blank to keep current email): ");
+                    string newEmail = Console.ReadLine();
+                    if (!string.IsNullOrEmpty(newEmail))
+                    {
+                        employee.Email = newEmail;
+                    }
+
+                    Console.Write("Enter New Role (Leave blank to keep current role): ");
+                    string newRole = Console.ReadLine();
+                    if (!string.IsNullOrEmpty(newRole))
+                    {
+                        if (Enum.TryParse(newRole, out EmployeeRole changeRole))
+                        {
+                            employee.Role = changeRole;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid role. Role remains unchanged.");
+                        }
+                    }
+
+                    int rowsAffected = employeeDAL.Update(employee);
+                    if (rowsAffected > 0)
+                    {
+                        Console.WriteLine("Employee updated successfully.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Failed to update employee.");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Multiple employees found. Please provide a more specific search key.");
+                }
             }
             else
             {
-                Console.WriteLine("Giá trị nhập vào không hợp lệ. Vui lòng nhập một số nguyên.");
+                Console.WriteLine("Employee not found.");
             }
-            // Add code to update password and role here
-
-            employeeDAL.Update(emp);
         }
 
         private void PrintAddScreen()

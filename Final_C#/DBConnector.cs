@@ -18,7 +18,7 @@ namespace Final_C
             public DBConnector()
             {
                 Server = "10.36.0.36";
-                Database = "";
+                Database = "toannv_final";
                 User = "toannv";
                 Password = "@Automation1";
             }
