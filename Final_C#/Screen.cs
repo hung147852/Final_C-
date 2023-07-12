@@ -45,13 +45,13 @@ namespace Final_C
                         PrintUpdateScreen();
                         break;
                     case 4:
-                        //manager.Remove();
+                        PrintDeleteScreen();
                         break;
                     case 5:
-                        //manager.Export();
+                        PrintExportScreen();
                         break;
                     case 6:
-                        //manager.Import();
+                        PrintImportScreen();
                         break;
                     case 7:
                         Console.WriteLine("------------END----------");
@@ -214,6 +214,57 @@ namespace Final_C
                 }
             } while (!checkLogin);
         }
+        private void PrintDeleteScreen()
+        {
+            Console.WriteLine("==== EMPLOYEE DELETE ====");
+            Console.Write("ENTER ID: ");
+            int id = Convert.ToInt32(Console.ReadLine());
+
+            Employee emp = new Employee { Id = id };
+            int rowsAffected = manager.Remove(emp);
+            if (rowsAffected > 0)
+            {
+                Console.WriteLine("Employee deleted successfully.");
+            }
+            else
+            {
+                Console.WriteLine("Employee not found or failed to delete.");
+            }
+        }
+        private void PrintExportScreen()
+        {
+            Console.WriteLine("==== EXPORT DATA ====");
+            Console.Write("Enter file path to export data: ");
+            string filePath = Console.ReadLine();
+
+            List<string> csvData = manager.Export();
+
+            // Ghi dữ liệu CSV vào file
+            try
+            {
+                using (StreamWriter writer = new StreamWriter(filePath))
+                {
+                    foreach (string csvLine in csvData)
+                    {
+                        writer.WriteLine(csvLine);
+                    }
+                }
+
+                Console.WriteLine("Data exported successfully.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error occurred while exporting data: " + ex.Message);
+            }
+        }
+
+        private void PrintImportScreen()
+        {
+            Console.WriteLine("==== IMPORT DATA ====");
+            Console.Write("Enter file path to import data: ");
+            string filePath = Console.ReadLine();
+
+            manager.Import(filePath);
+        }
     }
-    
 }

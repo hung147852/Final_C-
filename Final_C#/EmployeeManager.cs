@@ -7,6 +7,8 @@ using System.Numerics;
 using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
+using System;
+using System.IO;
 
 namespace Final_C
 {
@@ -18,6 +20,7 @@ namespace Final_C
         }
         public Employee? Login(string username, string password)
         {
+            Console.Write("Day la Login");
             //select DB de check
             return employeeDAL.SelectByUsernameAndPassword(username, password);
         }
@@ -62,9 +65,9 @@ namespace Final_C
                 reader.Close();
             }
         }
-        public void Export(string filepath)
+        public List<string> Export()
         {
-
+            return employeeDAL.Export();
         }
         public int AddNew(Employee emp)
         {

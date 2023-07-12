@@ -19,8 +19,8 @@ namespace Final_C
         }
         public Employee? SelectByUsernameAndPassword(string username, string password)
         {
-            
-            Employee emp = null;
+            Console.Write(" Day la Employee SelectByUsernameAndPassword");
+            Employee? emp = null;
             string sql = "SELECT * FROM EMPLOYEE WHERE username = @0 AND password = @1";
             SqlCommand cmd = new SqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("0", username);
@@ -33,7 +33,7 @@ namespace Final_C
                emp.User = (string)reader["username"];
                emp.FullName = (string) reader["name"];
                emp.Email = (string) reader["email"];
-               //emp.Password = (string) reader["password"];
+               emp.Password = (string) reader["password"];
                emp.Role = (EmployeeRole) reader["role"];
             }
             return emp;
@@ -128,14 +128,44 @@ namespace Final_C
             command.Parameters.AddWithValue("@0", id);
             return command.ExecuteNonQuery();
         }
+        public List<string> Export()
+        {
+            List<string> csvData = new List<string>();
+            try
+            {
+                // Truy vấn dữ liệu từ bảng EMPLOYEE
+                string sql = "SELECT id, username, name, role FROM EMPLOYEE";
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                // Tạo dữ liệu CSV từ kết quả truy vấn
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine("ID,Username,Name,Role");
+
+                while (reader.Read())
+                {
+                    int id = (int)reader["id"];
+                    string username = (string)reader["username"];
+                    string name = (string)reader["name"];
+                    EmployeeRole role = (EmployeeRole)reader["role"];
+
+                    string csvLine = $"{id},{username},{name},{role}";
+                    sb.AppendLine(csvLine);
+                }
+
+                csvData.Add(sb.ToString());
+                Console.WriteLine("Du lieu xuat ra thanh cong.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Khong the xuat du lieu ra xuat hien loi: " + ex.Message);
+            }
+
+            return csvData;
+        }
         public void Close()
         {
             conn.Close();
-        }
-
-        internal int Update(List<Employee?> employees)
-        {
-            throw new NotImplementedException();
         }
     }
 }
