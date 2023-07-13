@@ -7,23 +7,28 @@ using System.Numerics;
 using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
-using System;
 using System.IO;
+using Final_C_;
 
 namespace Final_C
 {
     public class EmployeeManager
     {
-        private EmployeeDAL employeeDAL;
+        EmployeeDAL employeeDAL;
+        public string GetCurrentEmployeeUsername()
+        {
+            return CurrentEmployee?.User;
+        }
         public EmployeeManager() 
         {
             employeeDAL = new EmployeeDAL();
         }
         public Employee? Login(string username, string password)
         {
-            Console.Write("Day la Login");
+            string hashedPassword = Utils.Hash(password, "sha512");
             //select DB de check
-            return employeeDAL.SelectByUsernameAndPassword(username, password);
+            //return employeeDAL.SelectByUsernameAndPassword(username, password);
+            return employeeDAL.SelectByUsernameAndPassword(username, hashedPassword);
         }
         public List<Employee> Find (string key) 
         {
@@ -82,5 +87,23 @@ namespace Final_C
         {
             return employeeDAL.Update(emp);
         }
+        public List<Employee> GetAllEmployees()
+        {
+            return employeeDAL.SelectAll();
+        }
+        public bool ChangePassword(string username, string currentPassword, string newPassword)
+        {
+            Employee employee = employeeDAL.SelectByUsernameAndPassword(username, currentPassword);
+            if (employee != null)
+            {
+                int rowsAffected = employeeDAL.ChangePassword(username, currentPassword, newPassword);
+                return rowsAffected > 0;
+            }
+            return false;
+        }
+        //public void EmployeeDALCls()
+        //{
+        //    employeeDAL.Close();
+        //}
     }
 }

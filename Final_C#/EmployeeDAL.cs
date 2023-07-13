@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Data.SqlClient;
 using FinalC;
 using System.Reflection.Metadata.Ecma335;
+using System.IO;
+using Final_C_;
 
 namespace Final_C
 {
@@ -17,9 +19,9 @@ namespace Final_C
             conn = new DBConnector().GetConnection();
             conn.Open();
         }
+
         public Employee? SelectByUsernameAndPassword(string username, string password)
         {
-            Console.Write(" Day la Employee SelectByUsernameAndPassword");
             Employee? emp = null;
             string sql = "SELECT * FROM EMPLOYEE WHERE username = @0 AND password = @1";
             SqlCommand cmd = new SqlCommand(sql, conn);
@@ -36,6 +38,7 @@ namespace Final_C
                emp.Password = (string) reader["password"];
                emp.Role = (EmployeeRole) reader["role"];
             }
+            reader.Close();
             return emp;
         }
         public Employee? SelectById(int id)
@@ -55,6 +58,7 @@ namespace Final_C
                 emp.Email = (string)reader["email"];
                 emp.Role = (EmployeeRole)reader["role"];
             }
+            reader.Close();
             return emp;
         }
         public List<Employee> SelectByKey(string key)
@@ -77,6 +81,7 @@ namespace Final_C
                 emp.Role = (EmployeeRole)reader["role"];
                 list.Add(emp);
             }
+            reader.Close();
             return list;
         }
         public List<Employee> SelectAll() 
@@ -96,6 +101,7 @@ namespace Final_C
                 emp.Role = (EmployeeRole)reader["role"];
                 list.Add(emp);
             }
+            reader.Close();
             return list;
         }
         public int Insert(Employee emp)
@@ -123,7 +129,7 @@ namespace Final_C
         }
         public int Delete(int id)
         {
-            string sql = "DELETE FROM EMPL WHERE id=@0";
+            string sql = "DELETE FROM EMPLOYEE WHERE id=@0";
             SqlCommand command = new SqlCommand(sql, conn);
             command.Parameters.AddWithValue("@0", id);
             return command.ExecuteNonQuery();
@@ -160,12 +166,24 @@ namespace Final_C
             {
                 Console.WriteLine("Khong the xuat du lieu ra xuat hien loi: " + ex.Message);
             }
-
+            conn.Close();
             return csvData;
         }
-        public void Close()
+        public int ChangePassword(string username, string currentPassword, string newPassword)
         {
-            conn.Close();
+            string hashedCurrentPassword = Utils.Hash(currentPassword, "sha512");
+            string hashedNewPassword = Utils.Hash(newPassword, "sha512");
+
+            string sql = "UPDATE EMPLOYEE SET password = @newPassword WHERE username = @username AND password = @currentPassword";
+            SqlCommand cmd = new SqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@newPassword", hashedNewPassword);
+            cmd.Parameters.AddWithValue("@username", username);
+            cmd.Parameters.AddWithValue("@currentPassword", hashedCurrentPassword);
+            return cmd.ExecuteNonQuery();
         }
+        //public void Close()
+        //{
+        //    conn.Close();
+        //}
     }
 }

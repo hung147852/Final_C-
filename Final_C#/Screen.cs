@@ -3,6 +3,7 @@ using FinalC;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.ObjectiveC;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -175,7 +176,50 @@ namespace Final_C
         }
         public void PrintUserScreen()
         {
-            PrintFindScreen(); 
+            int selected = 0;
+
+            do
+            {
+                Console.WriteLine("==== OPTIONS OF EMPLOYEE USER ====");
+                Console.WriteLine("\t1.Search Employee by Name or EmpNo");
+                Console.WriteLine("\t2.Search Device by Name");
+                Console.WriteLine("\t3.Update Device");
+                Console.WriteLine("\t4.Remove Device");
+                Console.WriteLine("\t5.Export Data");
+                Console.WriteLine("\t6.Import Data");
+                Console.WriteLine("\t7.Exit");
+                Console.Write("Select (1-7): ");
+                selected = Convert.ToInt16(Console.ReadLine());
+
+
+                switch (selected)
+                {
+                    case 1:
+                        PrintFindScreen();
+                        break;
+                    case 2:
+                        PrintAddScreen();
+                        break;
+                    case 3:
+                        PrintUpdateScreen();
+                        break;
+                    case 4:
+                        PrintDeleteScreen();
+                        break;
+                    case 5:
+                        PrintExportScreen();
+                        break;
+                    case 6:
+                        PrintImportScreen();
+                        break;
+                    case 7:
+                        Console.WriteLine("------------END----------");
+                        break;
+                    default:
+                        Console.WriteLine("Invalid");
+                        break;
+                }
+            } while (selected != 7);
         }
         private void DisplayEmployees(List<Employee> employees)
         {
@@ -217,6 +261,10 @@ namespace Final_C
         private void PrintDeleteScreen()
         {
             Console.WriteLine("==== EMPLOYEE DELETE ====");
+            Console.WriteLine("==== ALL EMPLOYEE ====");
+            List<Employee> employees = manager.GetAllEmployees();
+            DisplayEmployees(employees);
+
             Console.Write("ENTER ID: ");
             int id = Convert.ToInt32(Console.ReadLine());
 
@@ -256,6 +304,7 @@ namespace Final_C
             {
                 Console.WriteLine("Error occurred while exporting data: " + ex.Message);
             }
+
         }
 
         private void PrintImportScreen()
@@ -265,6 +314,36 @@ namespace Final_C
             string filePath = Console.ReadLine();
 
             manager.Import(filePath);
+        }
+        private void PrintChangePasswordScreen()
+        {
+            Console.WriteLine("==== CHANGE PASSWORD ====");
+            Console.Write("Retype current user: ");
+            string key = Console.ReadLine();
+            Console.Write("Enter current password: ");
+            string currentPassword = Console.ReadLine();
+            Console.Write("Enter new password: ");
+            string newPassword = Console.ReadLine();
+            Console.Write("Confirm new password: ");
+            string confirmNewPassword = Console.ReadLine();
+
+            if (newPassword == confirmNewPassword)
+            {
+                bool passwordChanged = manager.ChangePassword(key, currentPassword, newPassword);
+                if (passwordChanged)
+                {
+                    Console.WriteLine("Password changed successfully.");
+                }
+                else
+                {
+                    Console.WriteLine("Incorrect current password.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("New password and confirm password do not match.");
+            }
+
         }
     }
 }
