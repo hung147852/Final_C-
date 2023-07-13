@@ -14,9 +14,10 @@ namespace Final_C
 {
     public class EmployeeManager
     {
-        EmployeeDAL employeeDAL;
+        private EmployeeDAL employeeDAL;
         public EmployeeManager() 
         {
+            employeeDAL = new EmployeeDAL();
         }
         public Employee? Login(string username, string password)
         {
