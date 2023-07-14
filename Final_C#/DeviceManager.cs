@@ -24,7 +24,7 @@ namespace Final_C
         //    //select DB de check
         //    return employeeDAL.SelectByUsernameAndPassword(username, password);
         //}
-        public List<Device> Find (string key) 
+        public List<Device> FindDV (string key) 
         {
             int id;
             bool found = int.TryParse(key, out id);
@@ -39,7 +39,7 @@ namespace Final_C
                 return deviceDAL.SelectByKey(key);
             }
         }
-        public void Import(string filePath)
+        public void ImportDV(string filePath)
         {
             StreamReader reader = new StreamReader(filePath);
             try
@@ -62,25 +62,36 @@ namespace Final_C
                 reader.Close();
             }
         }
-        public List<string> Export()
+        public List<string> ExportDV()
         {
             return deviceDAL.Export();
         }
-        public int AddNew(Device device)
+        public int AddNewDV(Device device)
         {
             return deviceDAL.Insert(device);
         }
-        public int Remove(Device device)
+        public int RemoveDV(Device device)
         {
             return deviceDAL.Delete(device.Dname);
         }
-        public int Update(Device device)
+        public int UpdateDV(Device device)
         {
             return deviceDAL.Update(device);
         }
-        public List<Device> GetAllEmployees()
+        public List<Device> GetAllDevice()
         {
             return deviceDAL.SelectAll();
         }
+        public Device GetDeviceByName(string deviceName)
+        {
+            return deviceDAL.SelectByName(deviceName);
+        }
+        public Device GetDeviceById(int deviceId)
+        {
+            List<Device> devices = GetAllDevice();
+            Device device = devices.FirstOrDefault(d => d.Id == deviceId);
+            return device;
+        }
+    
     }
 }

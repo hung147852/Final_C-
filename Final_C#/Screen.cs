@@ -12,10 +12,12 @@ namespace Final_C
     public class Screen
     {
         EmployeeManager manager;
-        public Screen() 
+        DeviceManager deviceManager;
+        public Screen()
         {
             manager = new EmployeeManager();
-        } 
+            deviceManager = new DeviceManager();
+        }
         public void PrintManagerScreen()
         {
             int selected = 0;
@@ -195,16 +197,16 @@ namespace Final_C
                 switch (selected)
                 {
                     case 1:
-                        PrintFindScreen();
+                        PrintSearchDeviceScreen();
                         break;
                     case 2:
                         PrintAddScreen();
                         break;
                     case 3:
-                        PrintUpdateScreen();
+                        PrintUpdateDeviceScreen();
                         break;
                     case 4:
-                        PrintDeleteScreen();
+                        PrintRemoveDeviceScreen();
                         break;
                     case 5:
                         PrintExportScreen();
@@ -228,7 +230,7 @@ namespace Final_C
                 Console.WriteLine(emp);
             }
         }
-        public void PrintLoginScreen() 
+        public void PrintLoginScreen()
         {
             bool checkLogin = false;
             do
@@ -244,14 +246,16 @@ namespace Final_C
                 if (employee == null)
                 {
                     Console.WriteLine("Dang nhap khong thanh cong! Kiem tra Username hoac Password");
-                }else
+                }
+                else
                 {
                     checkLogin = true;
                     Console.WriteLine("Dang nhap thanh cong!");
-                    if(employee.Role == EmployeeRole.MANAGER)
+                    if (employee.Role == EmployeeRole.MANAGER)
                     {
                         PrintManagerScreen();
-                    }else if(employee.Role == EmployeeRole.USER)
+                    }
+                    else if (employee.Role == EmployeeRole.USER)
                     {
                         PrintUserScreen();
                     }
@@ -343,7 +347,148 @@ namespace Final_C
             {
                 Console.WriteLine("New password and confirm password do not match.");
             }
+        }
+        private void PrintSearchDeviceScreen()
+        {
+            Console.WriteLine("==== SEARCH DEVICE ====");
+            Console.Write("Enter device name or keyword: ");
+            string searchKey = Console.ReadLine();
 
+            // Gọi phương thức tìm kiếm thiết bị từ lớp DeviceManager
+            List<Device> devices = deviceManager.FindDV(searchKey);
+
+            // In danh sách thiết bị trước khi thực hiện tìm kiếm
+            PrintDeviceList(devices);
+        }
+        private void PrintUpdateDeviceScreen()
+        {
+            Console.WriteLine("==== UPDATE DEVICE ====");
+            Console.Write("Enter device name: ");
+            string deviceName = Console.ReadLine();
+
+            // Kiểm tra xem thiết bị có tồn tại hay không
+            Device device = deviceManager.GetDeviceByName(deviceName);
+            if (device != null)
+            {
+                Console.WriteLine("Device found:");
+                Console.WriteLine("Name: " + device.Dname);
+                Console.WriteLine("Description: " + device.Quantity);
+
+
+                // Nhập thông tin cập nhật
+                Console.Write("Enter new name (Leave blank to keep current name): ");
+                string newName = Console.ReadLine();
+                Console.Write("Enter new quantity (Leave blank to keep current description): ");
+                string newQuantityinput = Console.ReadLine();
+
+                int newQuantity;
+                if (int.TryParse(newQuantityinput, out newQuantity))
+                {
+                    // Thực hiện cập nhật thông tin thiết bị
+                    device.Dname = string.IsNullOrEmpty(newName) ? device.Dname : newName;
+                    device.Quantity = newQuantity;
+
+                    int rowsAffected = deviceManager.UpdateDV(device);
+                    if (rowsAffected > 0)
+                    {
+                        Console.WriteLine("Device updated successfully.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Failed to update device.");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Invalid quantity. Device update cancelled.");
+                }
+            }
+        }
+        private void PrintRemoveDeviceScreen()
+        {
+            Console.WriteLine("==== REMOVE DEVICE ====");
+            List<Device> devices = deviceManager.GetAllDevice();
+            PrintDeviceList(devices);
+            Console.Write("Enter device ID: ");
+            int deviceId = Convert.ToInt32(Console.ReadLine());
+
+            // Kiểm tra xem thiết bị có tồn tại hay không
+            Device device = deviceManager.GetDeviceById(deviceId);
+            if (device != null)
+            {
+                int rowsAffected = deviceManager.RemoveDV(device);
+                if (rowsAffected > 0)
+                {
+                    Console.WriteLine("Device removed successfully.");
+                }
+                else
+                {
+                    Console.WriteLine("Failed to remove device.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Device not found.");
+            }
+        }
+        private void PrintDeviceList(List<Device> devices)
+        {
+            Console.WriteLine("==== DEVICE LIST ====");
+            if (devices.Count > 0)
+            {
+                foreach (Device device in devices)
+                {
+                    Console.WriteLine("ID: " + device.Id);
+                    Console.WriteLine("Device Name: " + device.Dname);
+                    Console.WriteLine("Quantity: " + device.Quantity);
+                    Console.WriteLine("----------------------");
+                }
+            }
+            else
+            {
+                Console.WriteLine("No devices found.");
+            }
+        }
+        private void PrintExportDeviceScreen()
+        {
+            Console.WriteLine("==== EXPORT DEVICE DATA ====");
+            Console.Write("Enter file path to export data: ");
+            string filePath = Console.ReadLine();
+
+            // Gọi phương thức xuất dữ liệu thiết bị từ lớp DeviceManager
+            List<string> csvData = deviceManager.ExportDV();
+
+            // Ghi dữ liệu CSV vào file
+            try
+            {
+                using (StreamWriter writer = new StreamWriter(filePath))
+                {
+                    foreach (string csvLine in csvData)
+                    {
+                        writer.WriteLine(csvLine);
+                    }
+                }
+
+                Console.WriteLine("Device data exported successfully.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error occurred while exporting device data: " + ex.Message);
+            }
+        }
+
+        private void PrintImportDeviceScreen()
+        {
+            Console.WriteLine("==== IMPORT DEVICE DATA ====");
+            Console.Write("Enter file path to import data: ");
+            string filePath = Console.ReadLine();
+
+            deviceManager.ImportDV(filePath);
+
+            // Lấy số lượng thiết bị được nhập thành công từ lớp DeviceManager
+            int importedDeviceCount = deviceManager.GetImportedDeviceCount();
+
+            Console.WriteLine(importedDeviceCount + " devices imported.");
         }
     }
 }

@@ -133,6 +133,26 @@ namespace Final_C
             conn.Close();
             return csvData;
         }
+        public Device SelectByName(string deviceName)
+        {
+            string sql = "SELECT * FROM DEVICE WHERE LOWER(name) = @deviceName";
+            SqlCommand cmd = new SqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@deviceName", deviceName.ToLower());
+            SqlDataReader reader = cmd.ExecuteReader();
+
+            Device device = null;
+
+            if (reader.Read())
+            {
+                device = new Device();
+                device.Id = (int)reader["id"];
+                device.Dname = (string)reader["name"];
+                device.Quantity = (int)reader["quantity"];
+            }
+
+            reader.Close();
+            return device;
+        }
         public void Close()
         {
             conn.Close();
