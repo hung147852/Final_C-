@@ -14,16 +14,13 @@ namespace Final_C
     public class DeviceManager
     {
         DeviceDAL deviceDAL;
+        private int importedDeviceCount;
         public DeviceManager() 
         {
             deviceDAL = new DeviceDAL();
+            importedDeviceCount = 0;
         }
-        //public Employee? Login(string username, string password)
-        //{
-        //    Console.Write("Day la Login");
-        //    //select DB de check
-        //    return employeeDAL.SelectByUsernameAndPassword(username, password);
-        //}
+
         public List<Device> FindDV (string key) 
         {
             int id;
@@ -39,6 +36,31 @@ namespace Final_C
                 return deviceDAL.SelectByKey(key);
             }
         }
+        //public void ImportDV(string filePath)
+        //{
+        //    StreamReader reader = new StreamReader(filePath);
+        //    try
+        //    {
+        //        string line;
+        //        while ((line = reader.ReadLine()) != null)
+        //        {
+        //            string[] tokens = line.Split(',');
+        //            string name = tokens[0].Trim();
+        //            int quantity = int.Parse(tokens[1].Trim());
+        //            deviceDAL.Insert(new Device(0, name, quantity));
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine(ex);
+        //    }
+        //    finally
+        //    {
+        //        reader.Close();
+        //    }
+        //}
+
+
         public void ImportDV(string filePath)
         {
             StreamReader reader = new StreamReader(filePath);
@@ -51,6 +73,7 @@ namespace Final_C
                     string name = tokens[0].Trim();
                     int quantity = int.Parse(tokens[1].Trim());
                     deviceDAL.Insert(new Device(0, name, quantity));
+                    importedDeviceCount++; // Tăng số lượng thiết bị được nhập thành công
                 }
             }
             catch (Exception ex)
@@ -62,6 +85,12 @@ namespace Final_C
                 reader.Close();
             }
         }
+
+        public int GetImportedDeviceCount()
+        {
+            return importedDeviceCount;
+        }
+
         public List<string> ExportDV()
         {
             return deviceDAL.Export();

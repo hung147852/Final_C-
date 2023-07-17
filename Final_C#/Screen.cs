@@ -212,7 +212,7 @@ namespace Final_C
                         PrintExportScreen();
                         break;
                     case 6:
-                        PrintImportScreen();
+                        PrintImportDeviceScreennewest();
                         break;
                     case 7:
                         Console.WriteLine("------------END----------");
@@ -486,6 +486,18 @@ namespace Final_C
             deviceManager.ImportDV(filePath);
 
             // Lấy số lượng thiết bị được nhập thành công từ lớp DeviceManager
+            int importedDeviceCount = deviceManager.GetImportedDeviceCount();
+
+            Console.WriteLine(importedDeviceCount + " devices imported.");
+        }
+        public void PrintImportDeviceScreennewest()
+        {
+            Console.WriteLine("==== IMPORT DEVICE DATA ====");
+            Console.Write("Enter file path to import data: ");
+            string filePath = Console.ReadLine();
+
+            deviceManager.ImportDV(filePath);
+
             int importedDeviceCount = deviceManager.GetImportedDeviceCount();
 
             Console.WriteLine(importedDeviceCount + " devices imported.");
