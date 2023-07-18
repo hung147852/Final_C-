@@ -13,6 +13,7 @@ namespace Final_C
     {
         EmployeeManager manager;
         DeviceManager deviceManager;
+        private Employee loggedInEmployee;
         public Screen()
         {
             manager = new EmployeeManager();
@@ -24,15 +25,21 @@ namespace Final_C
 
             do
             {
-                Console.WriteLine("==== EMPLOYEE MANAGER ====");
+                Console.WriteLine("==== MANAGER SCREEN ====");
                 Console.WriteLine("\t1.Search Employee by Name or EmpNo");
                 Console.WriteLine("\t2.Add New Employee");
                 Console.WriteLine("\t3.Update Employee");
                 Console.WriteLine("\t4.Remove Employee");
                 Console.WriteLine("\t5.Export Data");
                 Console.WriteLine("\t6.Import Data");
-                Console.WriteLine("\t7.Exit");
-                Console.Write("Select (1-7): ");
+                Console.WriteLine("\t7.Search Device by Name or Id");
+                Console.WriteLine("\t8.Add New Device");
+                Console.WriteLine("\t9.Update Device");
+                Console.WriteLine("\t10.Remove Device");
+                Console.WriteLine("\t11.Export Device Data");
+                Console.WriteLine("\t12.Import Device Data");
+                Console.WriteLine("\t13.Exit");
+                Console.Write("Select (1-13): ");
                 selected = Convert.ToInt16(Console.ReadLine());
 
 
@@ -57,13 +64,82 @@ namespace Final_C
                         PrintImportScreen();
                         break;
                     case 7:
+                        PrintSearchDeviceScreen();
+                        break;
+                    case 8:
+                        PrintAddDeviceScreen();
+                        break;
+                    case 9:
+                        PrintUpdateDeviceScreen();
+                        break;
+                    case 10:
+                        PrintRemoveDeviceScreen();
+                        break;
+                    case 11:
+                        PrintExportDeviceScreen();
+                        break;
+                    case 12:
+                        PrintImportDeviceScreen();
+                        break;
+                    case 13:
                         Console.WriteLine("------------END----------");
                         break;
                     default:
                         Console.WriteLine("Invalid");
                         break;
                 }
-            } while (selected != 7);
+            } while (selected != 13);
+        }
+        public void PrintUserScreen()
+        {
+            int selected = 0;
+
+            do
+            {
+                Console.WriteLine("==== OPTIONS OF EMPLOYEE USER ====");
+                Console.WriteLine("\t1.Search Employee by Name or EmpNo");
+                Console.WriteLine("\t2.Search Device by Name");
+                Console.WriteLine("\t3.Update Device");
+                Console.WriteLine("\t4.Remove Device");
+                Console.WriteLine("\t5.Export Data");
+                Console.WriteLine("\t6.Import Data");
+                Console.WriteLine("\t7.Change your user password");
+                Console.WriteLine("\t8.Exit");
+                Console.Write("Select (1-7): ");
+                selected = Convert.ToInt16(Console.ReadLine());
+
+
+                switch (selected)
+                {
+                    case 1:
+                        PrintSearchDeviceScreen();
+                        break;
+                    case 2:
+                        PrintAddScreen();
+                        break;
+                    case 3:
+                        PrintUpdateDeviceScreen();
+                        break;
+                    case 4:
+                        PrintRemoveDeviceScreen();
+                        break;
+                    case 5:
+                        PrintExportScreen();
+                        break;
+                    case 6:
+                        PrintImportDeviceScreen();
+                        break;
+                    case 7:
+                        PrintChangePasswordScreen();
+                        break;
+                    case 8:
+                        Console.WriteLine("------------END----------");
+                        break;
+                    default:
+                        Console.WriteLine("Invalid");
+                        break;
+                }
+            } while (selected != 8);
         }
 
         private void PrintUpdateScreen()
@@ -176,53 +252,7 @@ namespace Final_C
                 Console.WriteLine("Data not found!");
             }
         }
-        public void PrintUserScreen()
-        {
-            int selected = 0;
-
-            do
-            {
-                Console.WriteLine("==== OPTIONS OF EMPLOYEE USER ====");
-                Console.WriteLine("\t1.Search Employee by Name or EmpNo");
-                Console.WriteLine("\t2.Search Device by Name");
-                Console.WriteLine("\t3.Update Device");
-                Console.WriteLine("\t4.Remove Device");
-                Console.WriteLine("\t5.Export Data");
-                Console.WriteLine("\t6.Import Data");
-                Console.WriteLine("\t7.Exit");
-                Console.Write("Select (1-7): ");
-                selected = Convert.ToInt16(Console.ReadLine());
-
-
-                switch (selected)
-                {
-                    case 1:
-                        PrintSearchDeviceScreen();
-                        break;
-                    case 2:
-                        PrintAddScreen();
-                        break;
-                    case 3:
-                        PrintUpdateDeviceScreen();
-                        break;
-                    case 4:
-                        PrintRemoveDeviceScreen();
-                        break;
-                    case 5:
-                        PrintExportScreen();
-                        break;
-                    case 6:
-                        PrintImportDeviceScreennewest();
-                        break;
-                    case 7:
-                        Console.WriteLine("------------END----------");
-                        break;
-                    default:
-                        Console.WriteLine("Invalid");
-                        break;
-                }
-            } while (selected != 7);
-        }
+        
         private void DisplayEmployees(List<Employee> employees)
         {
             foreach (Employee emp in employees)
@@ -250,6 +280,7 @@ namespace Final_C
                 else
                 {
                     checkLogin = true;
+                    loggedInEmployee = employee;
                     Console.WriteLine("Dang nhap thanh cong!");
                     if (employee.Role == EmployeeRole.MANAGER)
                     {
@@ -333,7 +364,7 @@ namespace Final_C
 
             if (newPassword == confirmNewPassword)
             {
-                bool passwordChanged = manager.ChangePassword(key, currentPassword, newPassword);
+                bool passwordChanged = manager.ChangePassword(loggedInEmployee.User, currentPassword, newPassword);
                 if (passwordChanged)
                 {
                     Console.WriteLine("Password changed successfully.");
@@ -359,6 +390,15 @@ namespace Final_C
 
             // In danh sách thiết bị trước khi thực hiện tìm kiếm
             PrintDeviceList(devices);
+        }
+        private void PrintAddDeviceScreen()
+        {
+            Console.WriteLine("==== ADD DEVICE ====");
+            Console.Write("Name: ");
+            String name = Console.ReadLine();
+            Console.Write("Quantity: ");
+            int quantity = Convert.ToInt32(Console.ReadLine());
+            deviceManager.AddNewDV(new Device(0, name, quantity));
         }
         private void PrintUpdateDeviceScreen()
         {

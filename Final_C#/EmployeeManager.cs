@@ -15,10 +15,10 @@ namespace Final_C
     public class EmployeeManager
     {
         EmployeeDAL employeeDAL;
-        public string GetCurrentEmployeeUsername()
-        {
-            return CurrentEmployee?.User;
-        }
+        //public string GetCurrentEmployeeUsername()
+        //{
+        //    return CurrentEmployee?.User;
+        //}
         public EmployeeManager() 
         {
             employeeDAL = new EmployeeDAL();
