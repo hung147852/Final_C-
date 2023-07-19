@@ -74,18 +74,17 @@ namespace Final_C
         }
         public int Insert(Device device)
         {
-            string sql = "INSERT INTO DEVICE(name,quantity) VALUES (@0, @1, @2)";
+            string sql = "INSERT INTO DEVICE(name,quantity) VALUES (@0,@1)";
             SqlCommand cmd = new SqlCommand(sql, conn);
-            cmd.Parameters.AddWithValue("0", device.Id);
-            cmd.Parameters.AddWithValue("1", device.Dname);
-            cmd.Parameters.AddWithValue("2", device.Quantity);
+            cmd.Parameters.AddWithValue("0", device.Dname);
+            cmd.Parameters.AddWithValue("1", device.Quantity);
             int rows = cmd.ExecuteNonQuery();
             return rows;
         }
 
         public int Update(Device device)
         {
-            string sql = "UPDATE DEVICE SET name = @1 OR SET quantity = @2 WHERE id=@0";
+            string sql = "UPDATE DEVICE SET name = @1, quantity = @2 WHERE id=@0";
             SqlCommand command = new SqlCommand(sql, conn);
             command.Parameters.AddWithValue("@0", device.Id);
             command.Parameters.AddWithValue("@1", device.Dname);

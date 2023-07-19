@@ -119,7 +119,7 @@ namespace Final_C
 
         public int Update(Employee emp)
         {
-            string sql = "UPDATE EMPLOYEE SET email = @1 OR SET name = @2 OR SET role = @3 WHERE id=@0";
+            string sql = "UPDATE EMPLOYEE SET email = @1, name = @2, role = @3 WHERE id=@0";
             SqlCommand command = new SqlCommand(sql, conn);
             command.Parameters.AddWithValue("@0", emp.Id);
             command.Parameters.AddWithValue("@1", emp.Email);
