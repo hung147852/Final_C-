@@ -25,10 +25,9 @@ namespace Final_C
         }
         public Employee? Login(string username, string password)
         {
-            string hashedPassword = Utils.Hash(password, "sha512");
-            //select DB de check
+            //string hashedPassword = Utils.Hash(password, "sha512");
             //return employeeDAL.SelectByUsernameAndPassword(username, password);
-            return employeeDAL.SelectByUsernameAndPassword(username, hashedPassword);
+            return employeeDAL.SelectByUsernameAndPassword(username, password);
         }
         public List<Employee> Find (string key) 
         {
@@ -71,7 +70,7 @@ namespace Final_C
                 reader.Close();
             }
         }
-        public List<string> Export()
+        public List<string> ExportEmp()
         {
             return employeeDAL.Export();
         }

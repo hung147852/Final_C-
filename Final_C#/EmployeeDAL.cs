@@ -106,7 +106,7 @@ namespace Final_C
         }
         public int Insert(Employee emp)
         {
-            string sql = "INSERT INTO EMPLOYEE(user,fullname,email,password,role) VALUES (@0,@1,@2,@3,@4)";
+            string sql = "INSERT INTO EMPLOYEE(username,name,email,password,role) VALUES (@0,@1,@2,@3,@4)";
             SqlCommand cmd = new SqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("0", emp.User);
             cmd.Parameters.AddWithValue("1", emp.FullName);
@@ -119,7 +119,7 @@ namespace Final_C
 
         public int Update(Employee emp)
         {
-            string sql = "UPDATE EMPLOYEE SET email = @1 OR SET fullname = @2 OR SET role = @3 WHERE id=@0";
+            string sql = "UPDATE EMPLOYEE SET email = @1 OR SET name = @2 OR SET role = @3 WHERE id=@0";
             SqlCommand command = new SqlCommand(sql, conn);
             command.Parameters.AddWithValue("@0", emp.Id);
             command.Parameters.AddWithValue("@1", emp.Email);
@@ -168,6 +168,7 @@ namespace Final_C
             }
             conn.Close();
             return csvData;
+            
         }
         public int ChangePassword(string username, string currentPassword, string newPassword)
         {

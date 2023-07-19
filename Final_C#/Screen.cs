@@ -115,7 +115,7 @@ namespace Final_C
                         PrintSearchDeviceScreen();
                         break;
                     case 2:
-                        PrintAddScreen();
+                        PrintAddDeviceScreen();
                         break;
                     case 3:
                         PrintUpdateDeviceScreen();
@@ -181,7 +181,7 @@ namespace Final_C
                         employee.Email = newEmail;
                     }
 
-                    Console.Write("Enter New Role (Leave blank to keep current role): ");
+                    Console.Write("Enter New Role '0' if want manager or '1' if user (Leave blank to keep current role): ");
                     string newRole = Console.ReadLine();
                     if (!string.IsNullOrEmpty(newRole))
                     {
@@ -320,7 +320,7 @@ namespace Final_C
             Console.Write("Enter file path to export data: ");
             string filePath = Console.ReadLine();
 
-            List<string> csvData = manager.Export();
+            List<string> csvData = manager.ExportEmp();
 
             // Ghi dữ liệu CSV vào file
             try
