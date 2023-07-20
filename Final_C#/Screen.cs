@@ -1,4 +1,5 @@
 ﻿using Final_C;
+using Final_C_;
 using FinalC;
 using System;
 using System.Collections.Generic;
@@ -38,8 +39,9 @@ namespace Final_C
                 Console.WriteLine("\t10.Remove Device");
                 Console.WriteLine("\t11.Export Device Data");
                 Console.WriteLine("\t12.Import Device Data");
-                Console.WriteLine("\t13.Exit");
-                Console.Write("Select (1-13): ");
+                Console.WriteLine("\t13.Change employee password");
+                Console.WriteLine("\t14.Exit");
+                Console.Write("Select (1-14): ");
                 selected = Convert.ToInt16(Console.ReadLine());
 
 
@@ -82,13 +84,16 @@ namespace Final_C
                         PrintImportDeviceScreen();
                         break;
                     case 13:
+                        PrintChangePasswordScreen();
+                        break;
+                    case 14:
                         Console.WriteLine("------------END----------");
                         break;
                     default:
                         Console.WriteLine("Invalid");
                         break;
                 }
-            } while (selected != 13);
+            } while (selected != 14);
         }
         public void PrintUserScreen()
         {
@@ -99,47 +104,51 @@ namespace Final_C
                 Console.WriteLine("==== OPTIONS OF EMPLOYEE USER ====");
                 Console.WriteLine("\t1.Search Employee by Name or EmpNo");
                 Console.WriteLine("\t2.Search Device by Name");
-                Console.WriteLine("\t3.Update Device");
-                Console.WriteLine("\t4.Remove Device");
-                Console.WriteLine("\t5.Export Data");
-                Console.WriteLine("\t6.Import Data");
-                Console.WriteLine("\t7.Change your user password");
-                Console.WriteLine("\t8.Exit");
-                Console.Write("Select (1-7): ");
+                Console.WriteLine("\t3.Add Device");
+                Console.WriteLine("\t4.Update Device");
+                Console.WriteLine("\t5.Remove Device");
+                Console.WriteLine("\t6.Export Data");
+                Console.WriteLine("\t7.Import Data");
+                Console.WriteLine("\t8.Change your user password");
+                Console.WriteLine("\t9.Exit");
+                Console.Write("Select (1-9): ");
                 selected = Convert.ToInt16(Console.ReadLine());
 
 
                 switch (selected)
                 {
                     case 1:
-                        PrintSearchDeviceScreen();
+                        PrintFindScreen();
                         break;
                     case 2:
-                        PrintAddDeviceScreen();
+                        PrintSearchDeviceScreen();
                         break;
                     case 3:
-                        PrintUpdateDeviceScreen();
+                        PrintAddDeviceScreen();
                         break;
                     case 4:
-                        PrintRemoveDeviceScreen();
+                        PrintUpdateDeviceScreen();
                         break;
                     case 5:
-                        PrintExportScreen();
+                        PrintRemoveDeviceScreen();
                         break;
                     case 6:
-                        PrintImportDeviceScreen();
+                        PrintExportScreen();
                         break;
                     case 7:
-                        PrintChangePasswordScreen();
+                        PrintImportDeviceScreen();
                         break;
                     case 8:
+                        PrintChangePasswordScreen();
+                        break;
+                    case 9:
                         Console.WriteLine("------------END----------");
                         break;
                     default:
                         Console.WriteLine("Invalid");
                         break;
                 }
-            } while (selected != 8);
+            } while (selected != 9);
         }
 
         private void PrintUpdateScreen()
@@ -169,9 +178,17 @@ namespace Final_C
 
                     if (!string.IsNullOrEmpty(currentPassword) && currentPassword == employee.Password)
                     {
+                        //Console.Write("Enter New Password: ");
+                        //string newPassword = Console.ReadLine();
+                        //employee.Password = newPassword;
                         Console.Write("Enter New Password: ");
                         string newPassword = Console.ReadLine();
-                        employee.Password = newPassword;
+                        if (!string.IsNullOrEmpty(newPassword))
+                        {
+                            string hasedPassword = Utils.Hash(newPassword, "sha512");
+                            employee.Password = hasedPassword;
+                        }
+
                     }
 
                     Console.Write("Enter New Email (Leave blank to keep current email): ");
@@ -270,7 +287,9 @@ namespace Final_C
                 Console.WriteLine("Username: ");
                 string? uname = Console.ReadLine();
                 Console.WriteLine("Password: ");
-                string? pwd = Console.ReadLine();
+                //string? pwd = Console.ReadLine();
+                string? pwd = Utils.Hash(Console.ReadLine(), "sha512");
+                Console.WriteLine("I LOVE YIU Screen");
                 // Check Login
                 Employee? employee = manager.Login(uname, pwd);
                 if (employee == null)
@@ -350,20 +369,50 @@ namespace Final_C
 
             manager.Import(filePath);
         }
+        //private void PrintChangePasswordScreen()
+        //{
+        //    Console.WriteLine("==== CHANGE PASSWORD ====");
+        //    Console.Write("Retype current user: ");
+        //    string key = Console.ReadLine();
+        //    Console.Write("Enter current password: ");
+        //    string currentPassword = Console.ReadLine();
+        //    Console.Write("Enter new password: ");
+        //    string newPassword = Console.ReadLine();
+        //    Console.Write("Confirm new password: ");
+        //    string confirmNewPassword = Console.ReadLine();
+
+        //    if (newPassword == confirmNewPassword)
+        //    {
+        //        bool passwordChanged = manager.ChangePassword(loggedInEmployee.User, currentPassword, newPassword);
+        //        if (passwordChanged)
+        //        {
+        //            Console.WriteLine("Password changed successfully.");
+        //        }
+        //        else
+        //        {
+        //            Console.WriteLine("Incorrect current password.");
+        //        }
+        //    }
+        //    else
+        //    {
+        //        Console.WriteLine("New password and confirm password do not match.");
+        //    }
+        //}
         private void PrintChangePasswordScreen()
         {
             Console.WriteLine("==== CHANGE PASSWORD ====");
             Console.Write("Retype current user: ");
             string key = Console.ReadLine();
             Console.Write("Enter current password: ");
-            string currentPassword = Console.ReadLine();
+            string currentPassword = Utils.Hash(Console.ReadLine(), "sha512");
             Console.Write("Enter new password: ");
-            string newPassword = Console.ReadLine();
+            string newPassword = Utils.Hash(Console.ReadLine(), "sha512");
             Console.Write("Confirm new password: ");
-            string confirmNewPassword = Console.ReadLine();
+            string confirmNewPassword = Utils.Hash(Console.ReadLine(), "sha512");
 
             if (newPassword == confirmNewPassword)
             {
+                // Gọi hàm ChangePassword của bạn và kiểm tra giá trị trả về
                 bool passwordChanged = manager.ChangePassword(loggedInEmployee.User, currentPassword, newPassword);
                 if (passwordChanged)
                 {
@@ -403,6 +452,9 @@ namespace Final_C
         private void PrintUpdateDeviceScreen()
         {
             Console.WriteLine("==== UPDATE DEVICE ====");
+            Console.WriteLine("==== LIST UPDATE DEVICE ====");
+            List<Device> devices = deviceManager.GetAllDevice();
+            PrintDeviceList(devices);
             Console.Write("Enter device name: ");
             string deviceName = Console.ReadLine();
 

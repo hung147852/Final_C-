@@ -7,7 +7,6 @@ class Program
 {
     static void Main(string[] args)
     {
-        Console.Write("Day la MENU Login");
         Screen screen = new Screen();
         screen.PrintLoginScreen();
 

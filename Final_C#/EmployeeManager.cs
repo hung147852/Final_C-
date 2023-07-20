@@ -90,15 +90,22 @@ namespace Final_C
         {
             return employeeDAL.SelectAll();
         }
+        //public bool ChangePassword(string username, string currentPassword, string newPassword)
+        //{
+        //    Employee employee = employeeDAL.SelectByUsernameAndPassword(username, currentPassword);
+        //    if (employee != null)
+        //    {
+        //        int rowsAffected = employeeDAL.ChangePassword(username, currentPassword, newPassword);
+        //        return rowsAffected > 0;
+        //    }
+        //    return false;
+        //}
         public bool ChangePassword(string username, string currentPassword, string newPassword)
         {
-            Employee employee = employeeDAL.SelectByUsernameAndPassword(username, currentPassword);
-            if (employee != null)
-            {
-                int rowsAffected = employeeDAL.ChangePassword(username, currentPassword, newPassword);
-                return rowsAffected > 0;
-            }
-            return false;
+            string hashedCurrentPassword = Utils.Hash(currentPassword, "sha512");
+            string hashedNewPassword = Utils.Hash(newPassword, "sha512");
+
+            return employeeDAL.ChangePassword(username, hashedCurrentPassword, hashedNewPassword);
         }
         //public void EmployeeDALCls()
         //{

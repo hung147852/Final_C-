@@ -22,6 +22,7 @@ namespace Final_C
 
         public Employee? SelectByUsernameAndPassword(string username, string password)
         {
+            Console.WriteLine("I LOVE YIU EmployeeDAL");
             Employee? emp = null;
             string sql = "SELECT * FROM EMPLOYEE WHERE username = @0 AND password = @1";
             SqlCommand cmd = new SqlCommand(sql, conn);
@@ -139,12 +140,10 @@ namespace Final_C
             List<string> csvData = new List<string>();
             try
             {
-                // Truy vấn dữ liệu từ bảng EMPLOYEE
                 string sql = "SELECT id, username, name, role FROM EMPLOYEE";
                 SqlCommand cmd = new SqlCommand(sql, conn);
                 SqlDataReader reader = cmd.ExecuteReader();
 
-                // Tạo dữ liệu CSV từ kết quả truy vấn
                 StringBuilder sb = new StringBuilder();
                 sb.AppendLine("ID,Username,Name,Role");
 
@@ -170,21 +169,42 @@ namespace Final_C
             return csvData;
             
         }
-        public int ChangePassword(string username, string currentPassword, string newPassword)
+        //public bool ChangePassword(string username, string currentPassword, string newPassword)
+        //{
+        //    string hashedCurrentPassword = Utils.Hash(currentPassword, "sha512");
+        //    string hashedNewPassword = Utils.Hash(newPassword, "sha512");
+
+        //    string sql = "UPDATE EMPLOYEE SET password = @newPassword WHERE username = @username AND password = @currentPassword";
+        //    SqlCommand cmd = new SqlCommand(sql, conn);
+        //    cmd.Parameters.AddWithValue("@newPassword", hashedNewPassword);
+        //    cmd.Parameters.AddWithValue("@username", username);
+        //    cmd.Parameters.AddWithValue("@currentPassword", hashedCurrentPassword);
+        //    return cmd.ExecuteNonQuery();
+        //}
+        public bool ChangePassword(string username, string currentPassword, string newPassword)
         {
+
+            if (String.IsNullOrEmpty(username) || String.IsNullOrEmpty(currentPassword))
+            {
+                return false;
+            }
+
             string hashedCurrentPassword = Utils.Hash(currentPassword, "sha512");
             string hashedNewPassword = Utils.Hash(newPassword, "sha512");
 
+
             string sql = "UPDATE EMPLOYEE SET password = @newPassword WHERE username = @username AND password = @currentPassword";
-            SqlCommand cmd = new SqlCommand(sql, conn);
-            cmd.Parameters.AddWithValue("@newPassword", hashedNewPassword);
-            cmd.Parameters.AddWithValue("@username", username);
-            cmd.Parameters.AddWithValue("@currentPassword", hashedCurrentPassword);
-            return cmd.ExecuteNonQuery();
+
+            using (SqlCommand cmd = new SqlCommand(sql, conn))
+            {
+                cmd.Parameters.AddWithValue("@newPassword", hashedNewPassword);
+                cmd.Parameters.AddWithValue("@username", username);
+                cmd.Parameters.AddWithValue("@currentPassword", hashedCurrentPassword);
+
+                int affectedRows = cmd.ExecuteNonQuery();
+
+                return affectedRows == 1;
+            }
         }
-        //public void Close()
-        //{
-        //    conn.Close();
-        //}
     }
 }
