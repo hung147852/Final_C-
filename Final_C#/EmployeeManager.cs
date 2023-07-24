@@ -25,6 +25,7 @@ namespace Final_C
         }
         public Employee? Login(string username, string password)
         {
+            Console.WriteLine(username + " " + password);
             //string hashedPassword = Utils.Hash(password, "sha512");
             //return employeeDAL.SelectByUsernameAndPassword(username, password);
             return employeeDAL.SelectByUsernameAndPassword(username, password);

@@ -31,7 +31,8 @@ namespace Final_C
             SqlDataReader reader =  cmd.ExecuteReader();
             while (reader.Read())
             {
-               emp = new Employee();
+                Console.WriteLine("I LOVE YIU EmployeeDAL1");
+                emp = new Employee();
                emp.Id = (int) reader["id"];
                emp.User = (string)reader["username"];
                emp.FullName = (string) reader["name"];
@@ -189,8 +190,8 @@ namespace Final_C
                 return false;
             }
 
-            string hashedCurrentPassword = Utils.Hash(currentPassword, "sha512");
-            string hashedNewPassword = Utils.Hash(newPassword, "sha512");
+            string hashedCurrentPassword = currentPassword;
+            string hashedNewPassword = newPassword;
 
 
             string sql = "UPDATE EMPLOYEE SET password = @newPassword WHERE username = @username AND password = @currentPassword";

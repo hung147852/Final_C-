@@ -289,7 +289,7 @@ namespace Final_C
                 Console.WriteLine("Password: ");
                 //string? pwd = Console.ReadLine();
                 string? pwd = Utils.Hash(Console.ReadLine(), "sha512");
-                Console.WriteLine("I LOVE YIU Screen");
+                Console.WriteLine(pwd);
                 // Check Login
                 Employee? employee = manager.Login(uname, pwd);
                 if (employee == null)
@@ -404,11 +404,11 @@ namespace Final_C
             Console.Write("Retype current user: ");
             string key = Console.ReadLine();
             Console.Write("Enter current password: ");
-            string currentPassword = Utils.Hash(Console.ReadLine(), "sha512");
+            string currentPassword = Console.ReadLine();
             Console.Write("Enter new password: ");
-            string newPassword = Utils.Hash(Console.ReadLine(), "sha512");
+            string newPassword = Console.ReadLine();
             Console.Write("Confirm new password: ");
-            string confirmNewPassword = Utils.Hash(Console.ReadLine(), "sha512");
+            string confirmNewPassword = Console.ReadLine();
 
             if (newPassword == confirmNewPassword)
             {
