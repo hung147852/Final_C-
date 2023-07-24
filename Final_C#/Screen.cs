@@ -412,7 +412,6 @@ namespace Final_C
 
             if (newPassword == confirmNewPassword)
             {
-                // Gọi hàm ChangePassword của bạn và kiểm tra giá trị trả về
                 bool passwordChanged = manager.ChangePassword(loggedInEmployee.User, currentPassword, newPassword);
                 if (passwordChanged)
                 {
@@ -434,10 +433,8 @@ namespace Final_C
             Console.Write("Enter device name or keyword: ");
             string searchKey = Console.ReadLine();
 
-            // Gọi phương thức tìm kiếm thiết bị từ lớp DeviceManager
             List<Device> devices = deviceManager.FindDV(searchKey);
 
-            // In danh sách thiết bị trước khi thực hiện tìm kiếm
             PrintDeviceList(devices);
         }
         private void PrintAddDeviceScreen()
@@ -458,7 +455,6 @@ namespace Final_C
             Console.Write("Enter device name: ");
             string deviceName = Console.ReadLine();
 
-            // Kiểm tra xem thiết bị có tồn tại hay không
             Device device = deviceManager.GetDeviceByName(deviceName);
             if (device != null)
             {
@@ -466,8 +462,6 @@ namespace Final_C
                 Console.WriteLine("Name: " + device.Dname);
                 Console.WriteLine("Description: " + device.Quantity);
 
-
-                // Nhập thông tin cập nhật
                 Console.Write("Enter new name (Leave blank to keep current name): ");
                 string newName = Console.ReadLine();
                 Console.Write("Enter new quantity (Leave blank to keep current description): ");
@@ -476,7 +470,6 @@ namespace Final_C
                 int newQuantity;
                 if (int.TryParse(newQuantityinput, out newQuantity))
                 {
-                    // Thực hiện cập nhật thông tin thiết bị
                     device.Dname = string.IsNullOrEmpty(newName) ? device.Dname : newName;
                     device.Quantity = newQuantity;
 
@@ -504,7 +497,6 @@ namespace Final_C
             Console.Write("Enter device ID: ");
             int deviceId = Convert.ToInt32(Console.ReadLine());
 
-            // Kiểm tra xem thiết bị có tồn tại hay không
             Device device = deviceManager.GetDeviceById(deviceId);
             if (device != null)
             {
@@ -547,10 +539,8 @@ namespace Final_C
             Console.Write("Enter file path to export data: ");
             string filePath = Console.ReadLine();
 
-            // Gọi phương thức xuất dữ liệu thiết bị từ lớp DeviceManager
             List<string> csvData = deviceManager.ExportDV();
 
-            // Ghi dữ liệu CSV vào file
             try
             {
                 using (StreamWriter writer = new StreamWriter(filePath))
@@ -577,7 +567,6 @@ namespace Final_C
 
             deviceManager.ImportDV(filePath);
 
-            // Lấy số lượng thiết bị được nhập thành công từ lớp DeviceManager
             int importedDeviceCount = deviceManager.GetImportedDeviceCount();
 
             Console.WriteLine(importedDeviceCount + " devices imported.");

@@ -72,7 +72,7 @@ namespace Final_C
                     string name = tokens[0].Trim();
                     int quantity = int.Parse(tokens[1].Trim());
                     deviceDAL.Insert(new Device(0, name, quantity));
-                    importedDeviceCount++; // Tăng số lượng thiết bị được nhập thành công
+                    importedDeviceCount++;
                 }
             }
             catch (Exception ex)

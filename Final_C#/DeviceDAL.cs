@@ -103,12 +103,10 @@ namespace Final_C
             List<string> csvData = new List<string>();
             try
             {
-                // Truy vấn dữ liệu từ bảng EMPLOYEE
                 string sql = "SELECT id, name, quantity FROM DEVICE";
                 SqlCommand cmd = new SqlCommand(sql, conn);
                 SqlDataReader reader = cmd.ExecuteReader();
 
-                // Tạo dữ liệu CSV từ kết quả truy vấn
                 StringBuilder sb = new StringBuilder();
                 sb.AppendLine("ID,Devicename,Quantity");
 
